@@ -1,0 +1,3 @@
+include ':detailinfolayout2'
+include ':app'
+rootProject.name = "DetailInfoLayout2"
