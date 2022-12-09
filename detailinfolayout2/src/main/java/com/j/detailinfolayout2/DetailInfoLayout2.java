@@ -10,6 +10,7 @@ import android.text.util.Linkify;
 import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -95,7 +96,23 @@ public class DetailInfoLayout2 extends RecyclerView {
                                 tvInfoValue,
                                 detailInfo.getRightDrawableRes()
                         );
-                        tvInfoValue.post(() -> tvInfoValue.setGravity(tvInfoValue.getLineCount() > 1 ? Gravity.START : Gravity.END));
+                        tvInfoKey.post(() -> tvInfoValue.post(() -> {
+                            LinearLayout.LayoutParams adapt = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1);
+                            LinearLayout.LayoutParams wrap = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                            if (tvInfoKey.getLineCount() > 1 && tvInfoValue.getLineCount() > 1) {
+                                tvInfoKey.setLayoutParams(adapt);
+                                tvInfoValue.setLayoutParams(adapt);
+                            } else if (tvInfoKey.getLineCount() > 1){
+                                tvInfoKey.setLayoutParams(adapt);
+                                tvInfoValue.setLayoutParams(wrap);
+                            } else if (tvInfoValue.getLineCount() > 1) {
+                                tvInfoKey.setLayoutParams(wrap);
+                                tvInfoValue.setLayoutParams(adapt);
+                            } else {
+                                tvInfoKey.setLayoutParams(adapt);
+                                tvInfoValue.setLayoutParams(adapt);
+                            }
+                        }));
                         break;
                     case RICH_TEXT:
                         TextView tvInfoValue2 = holder.getView(R.id.tv_info_value);
